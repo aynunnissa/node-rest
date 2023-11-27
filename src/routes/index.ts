@@ -5,6 +5,7 @@ const url = require('url');
 // Routes
 const locationRoutes = require('./location-routes');
 const menuRoutes = require('./menu-routes');
+const cartRoutes = require('./cart-routes');
 
 module.exports = (req: Request, res: ServerResponse) => {
   const parsedUrl = url.parse(req.url, true);
@@ -12,6 +13,8 @@ module.exports = (req: Request, res: ServerResponse) => {
     locationRoutes(req, res);
   } else if (parsedUrl.pathname.startsWith('/api/menus')) {
     menuRoutes(req, res);
+  } else if (parsedUrl.pathname.startsWith('/api/cart')) {
+    cartRoutes(req, res);
   } else {
     res.statusCode = 404;
     res.setHeader('Content-Type', 'application/json');

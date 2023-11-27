@@ -8,7 +8,7 @@ module.exports = (req: Request, res: ServerResponse) => {
       cartController.getCartItems(req, res);
       break;
 
-    case 'PUT':
+    case 'POST':
       cartController.addItemToCart(req, res);
       break;
 
