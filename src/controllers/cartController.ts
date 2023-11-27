@@ -89,7 +89,19 @@ const updateCart = async (req: Request, res: ServerResponse) => {
   }
 };
 
-const checkoutCart = (req: Request, res: ServerResponse) => {};
+const checkoutCart = (req: Request, res: ServerResponse) => {
+  const query = 'DELETE FROM cart_items';
+  db.query(query, (err: Error) => {
+    if (err) {
+      console.error('Error processing checkout:', err);
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Internal Server Error' }));
+    } else {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ message: 'Checkout successful' }));
+    }
+  });
+};
 
 module.exports = {
   getCartItems,
