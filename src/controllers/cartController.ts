@@ -1,9 +1,13 @@
 import { ServerResponse } from "http";
-import * as url from 'url';
+const requestBodyParser = require('../util/body-parser');
+import Cart from "../db/models/cart";
+import Menu from "../db/models/menu";
 
-const db = require('../db/index').db;
-
-const getCartItems = (req: Request, res: ServerResponse) => {};
+const getCartItems = async (req: Request, res: ServerResponse) => {
+  const cart = await Cart.findAll({ include: [{ model: Menu }] });
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify({ data: cart }))
+};
 
 const addItemToCart = async (req: Request, res: ServerResponse) => {
   const requestBodyParser = require('../util/body-parser');
@@ -14,48 +18,32 @@ const addItemToCart = async (req: Request, res: ServerResponse) => {
     if (!body.menu_id || !body.quantity) {
       res.writeHead(400, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: 'Missing required parameters' }));
-      db.end(); // Close the database connection
       return;
     }
 
-    const insertQuery =
-      'INSERT INTO cart_items (menu_id, quantity) VALUES (?, ?)';
-    const values = [body.menu_id, body.quantity];
-
-    db.query(insertQuery, values, (err: Error, results: Object) => {
-      if (err) {
-        console.error('MySQL query error:', err);
-        res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Internal Server Error' }));
-      } else {
-        res.writeHead(201, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: 'Item added to cart successfully', data: results }));
-      }
-
-      db.end();
-    });
+    const newCartItem = await Cart.create({ quantity: body.quantity, menuId: body.menu_id });
+    res.writeHead(201, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ message: 'Item added to cart successfully', data: newCartItem }))
   } catch (err) {
     console.log(err)
   }
 };
 
-const removeItemFromCart = (req: Request, res: ServerResponse) => {
-  const parsedUrl = url.parse(req.url, true)
-  const cartItemId = parsedUrl.query.cartItemId;
+const removeItemFromCart = async (req: Request, res: ServerResponse) => {
+  try {
+    let body = await requestBodyParser(req);
 
-  const query = 'DELETE FROM cart_items WHERE id = ?';
-  db.query(query, [cartItemId], (err: Error) => {
-    if (err) {
-      console.error('Error removing item from cart:', err);
-      res.writeHead(500, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: 'Internal Server Error' }));
-    } else {
-      res.writeHead(204, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ message: 'Item removed from cart successfully' }));
+    if (!body.cartItemId) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Missing required parameters' }));
+      return;
     }
-  });
 
-  db.end();
+    await Cart.destroy({ where: { menuId: body.cartItemId } });
+    res.writeHead(204, { 'Content-Type': 'application/json' });
+  } catch (err) {
+    console.log(err)
+  }
 };
 
 const updateCart = async (req: Request, res: ServerResponse) => {
@@ -67,40 +55,26 @@ const updateCart = async (req: Request, res: ServerResponse) => {
     if (!body.item_id || !body.quantity) {
       res.writeHead(400, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: 'Missing required parameters' }));
-      db.end(); // Close the database connection
       return;
     }
 
-    const query = 'UPDATE cart_items SET quantity = ? WHERE id = ?';
-    db.query(query, [body.quantity, body.item_id], (err: Error) => {
-      if (err) {
-        console.error('Error editing item in cart:', err);
-        res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Internal Server Error' }));
-      } else {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: 'Item in cart edited successfully' }));
-      }
-    });
-
-    db.end();
+    await Cart.update({ quantity: body.quantity }, { where: { id: body.item_id }});
+  
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ message: 'Item updated successfully' }));
   } catch (error) {
     console.log(error)
   }
 };
 
-const checkoutCart = (req: Request, res: ServerResponse) => {
-  const query = 'DELETE FROM cart_items';
-  db.query(query, (err: Error) => {
-    if (err) {
-      console.error('Error processing checkout:', err);
-      res.writeHead(500, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: 'Internal Server Error' }));
-    } else {
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ message: 'Checkout successful' }));
-    }
-  });
+const checkoutCart = async (req: Request, res: ServerResponse) => {
+  try {
+    await Cart.destroy({ truncate: true });
+    res.writeHead(204, { 'Content-Type': 'application/json' });
+    res.end();
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 module.exports = {
