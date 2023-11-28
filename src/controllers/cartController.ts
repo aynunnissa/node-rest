@@ -3,8 +3,6 @@ const requestBodyParser = require('../util/body-parser');
 import Cart from "../db/models/cart";
 import Menu from "../db/models/menu";
 
-const db = require('../db/index').db;
-
 const getCartItems = async (req: Request, res: ServerResponse) => {
   const cart = await Cart.findAll({ include: [{ model: Menu }] });
   res.writeHead(200, { 'Content-Type': 'application/json' });
