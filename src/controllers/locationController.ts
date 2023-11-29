@@ -1,10 +1,15 @@
 import { ServerResponse } from "http";
 import Location from "../db/models/location";
+import { serverErrorResponse, successResponse } from "../util/response";
 
 const getLocations = async (req: Request, res: ServerResponse) => {
-    const locations = await Location.findAll();
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ data: locations }));
+    try {
+      const locations = await Location.findAll();
+      successResponse(res, { data: locations })
+    } catch (error) {
+      serverErrorResponse(res, 'Failed to get all locations.')
+    }
+    
 };
 
 module.exports = {

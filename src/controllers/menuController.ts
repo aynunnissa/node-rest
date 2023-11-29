@@ -1,10 +1,15 @@
 import { ServerResponse } from "http";
 import Menu from "../db/models/menu";
+import { serverErrorResponse, successResponse } from "../util/response";
 
 const getMenus = async (req: Request, res: ServerResponse) => {
-    const menu = await Menu.findAll();
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ data: menu }));
+    try {
+      const menu = await Menu.findAll();
+      successResponse(res, { data: menu })
+    } catch (error) {
+      serverErrorResponse(res, 'Failed to get all menus.')
+    }
+    
 };
 
 module.exports = {
