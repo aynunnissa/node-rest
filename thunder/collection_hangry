@@ -1,0 +1,122 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "Hangry",
+    "dateExported": "2023-11-29T00:17:12.427Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "52ff2ab0-e7f9-4e4e-9488-47db739c9794",
+            "colId": "ebab076e-eab8-40d0-b0d6-63570a27bb89",
+            "containerId": "",
+            "name": "Get All Locations",
+            "url": "http://localhost:5000/api/locations",
+            "method": "GET",
+            "sortNum": 5000,
+            "created": "2023-11-29T00:11:04.556Z",
+            "modified": "2023-11-29T00:11:21.540Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "6a09e18d-8512-4ad6-ae83-00877a860d44",
+            "colId": "ebab076e-eab8-40d0-b0d6-63570a27bb89",
+            "containerId": "",
+            "name": "Get All Menus",
+            "url": "http://localhost:5000/api/menus",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2023-11-29T00:10:13.563Z",
+            "modified": "2023-11-29T00:10:13.563Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "e942337e-2f1b-4824-97e3-8a9e2658d59e",
+            "colId": "ebab076e-eab8-40d0-b0d6-63570a27bb89",
+            "containerId": "",
+            "name": "Get All Cart Items",
+            "url": "http://localhost:5000/api/cart",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2023-11-29T00:11:34.985Z",
+            "modified": "2023-11-29T00:11:49.890Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "445fff45-2771-41ab-b583-8fd46d5261fb",
+            "colId": "ebab076e-eab8-40d0-b0d6-63570a27bb89",
+            "containerId": "",
+            "name": "Add Item to Cart",
+            "url": "http://localhost:5000/api/cart",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-11-29T00:12:16.003Z",
+            "modified": "2023-11-29T00:12:16.003Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"menu_id\": 4,\n  \"quantity\": 14\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "a8fdd6de-1b0d-4b80-8423-39d9522addce",
+            "colId": "ebab076e-eab8-40d0-b0d6-63570a27bb89",
+            "containerId": "",
+            "name": "Update Cart Item",
+            "url": "http://localhost:5000/api/cart",
+            "method": "PUT",
+            "sortNum": 32500,
+            "created": "2023-11-29T00:14:31.159Z",
+            "modified": "2023-11-29T00:15:15.726Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"item_id\": 1,\n  \"quantity\": 11\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "0c17e277-4534-495a-a5b3-82b195a61203",
+            "colId": "ebab076e-eab8-40d0-b0d6-63570a27bb89",
+            "containerId": "",
+            "name": "Remove Item from Cart",
+            "url": "http://localhost:5000/api/cart",
+            "method": "DELETE",
+            "sortNum": 35000,
+            "created": "2023-11-29T00:12:46.731Z",
+            "modified": "2023-11-29T00:13:57.715Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"cartItemId\": 1\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "a67d5bb3-5d5f-4abe-a348-805b39a398c8",
+            "colId": "ebab076e-eab8-40d0-b0d6-63570a27bb89",
+            "containerId": "",
+            "name": "Checkout Cart",
+            "url": "http://localhost:5000/api/cart/checkout",
+            "method": "DELETE",
+            "sortNum": 40000,
+            "created": "2023-11-29T00:12:28.518Z",
+            "modified": "2023-11-29T00:12:28.518Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        }
+    ]
+}
