@@ -1,5 +1,6 @@
 import { ServerResponse } from "http";
 import * as url from 'url';
+import { badRequestResponse } from "../util/response";
 
 const cartController = require('../controllers/cartController');
 
@@ -26,12 +27,7 @@ module.exports = (req: Request, res: ServerResponse) => {
         break;
   
       default:
-        res.statusCode = 404;
-        res.setHeader('Content-Type', 'application/json');
-        res.write(
-          JSON.stringify({ title: 'Not Found', message: 'Route not found' })
-        );
-        res.end();
+        badRequestResponse(res, 'Method not allowed')
     }
   }
 };

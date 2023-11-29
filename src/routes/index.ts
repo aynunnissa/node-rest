@@ -1,4 +1,5 @@
 import { ServerResponse } from "http";
+import { notFoundResponse } from "../util/response";
 
 const url = require('url');
 
@@ -16,11 +17,6 @@ module.exports = (req: Request, res: ServerResponse) => {
   } else if (parsedUrl.pathname.startsWith('/api/cart')) {
     cartRoutes(req, res);
   } else {
-    res.statusCode = 404;
-    res.setHeader('Content-Type', 'application/json');
-    res.write(
-    JSON.stringify({ title: 'Not Found', message: 'Route not found' })
-    );
-    res.end();
+    notFoundResponse(res, 'Route not found')
   }
 };
